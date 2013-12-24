@@ -124,7 +124,7 @@ EOD;
 	}
 
 	/**
-	 * Generate an ew installation SQL file
+	 * Generate a new installation SQL file
 	 * @throws CException
 	 */
 	public function prepareInstall() {
@@ -147,7 +147,7 @@ EOD;
 		$name = Yii::getPathOfAlias('root.console.runtime') . DIRECTORY_SEPARATOR . 'm' . gmdate('ymd_His') . '_' . 'rbacMigrate.sql';
 
 		if(@file_put_contents($name, $sql)) {
-			echo "You need to install SQL file for your settings manually. File saved as: {$name}" . PHP_EOL;
+			echo "You need to install helper SQL file manually. File saved as: {$name}" . PHP_EOL;
 		} else {
 			echo "Error during saving installation SQL file: {$name}" . PHP_EOL;
 		}
@@ -156,7 +156,7 @@ EOD;
 	}
 
 	/**
-	 * Checks if needed tables installed. Not checking needed triggers/operators.
+	 * Checks if needed tables were installed. No any checking for needed triggers/operators.
 	 * @return bool
 	 */
 	protected function isInstalled() {
@@ -201,26 +201,23 @@ EOD;
 			$template = Yii::getPathOfAlias($this->templateFile) . '.php';
 
 		if(!(file_exists($template))) {
-			echo "Template file is not found: '{$template}'" . PHP_EOL;
+			echo "Template file was not found: '{$template}'" . PHP_EOL;
 			return 1;
 		}
 
 		if($this->confirm("Create new migration '$file'?")) {
-			/**
-			 * TODO: add pagination, sometimes it can be quite collection.
-			 */
-			$items = $this->getDbConnection()->createCommand()->select('*')->from("{$this->trackPrefix}item_log")->order('id')->queryAll();
-			$children = $this->getDbConnection()->createCommand()->select('*')->from("{$this->trackPrefix}child_log")->order('id')->queryAll();
-
+			$db = $this->getDbConnection();
 			$log = array();
 
-			$db = $this->getDbConnection();
-
+			/**
+			 * TODO: add pagination, sometimes it can be quite huge collection.
+			 */
+			$rows = $db->createCommand()->select('*')->from("{$this->trackPrefix}item_log")->order('id')->queryAll();
 			try {
 				/**
 			 	* first of all we need to update the items
 			 	*/
-				foreach($items as $item) {
+				foreach($rows as $item) {
 					switch($item['operation']) {
 						case self::OPERATION_INSERT:
 							/**
@@ -249,9 +246,10 @@ EOD;
 				}
 
 				/**
-				 * now we can to update the children
+				 * now we can update the children
 				 */
-				foreach($children as $item) {
+				$rows = $db->createCommand()->select('*')->from("{$this->trackPrefix}child_log")->order('id')->queryAll();
+				foreach($rows as $item) {
 					switch($item['operation']) {
 						case self::OPERATION_INSERT:
 							/**
@@ -289,7 +287,7 @@ EOD;
 			echo "New migration created successfully." . PHP_EOL;
 
 			/**
-			 * Cleanup logs table
+			 * Cleanup logs tables
 			 */
 			$t = $db->beginTransaction();
 			$db->createCommand()->delete("{$this->trackPrefix}item_log");
