@@ -6,12 +6,14 @@ Helper command to ease track of RBAC migration. This works only for AuthManager 
 Usage:
 ======
 
-1) at developer machine add next command at 'commandMap' of your config
+1) at developer machine add next command at 'commandMap' of your config:
+```php
 'commandMap' => array(
 		'rbacMigrate' => array(
 			'class' => 'root.console.extensions.yii-rbac-migrate.rbacMigrateCommand',
 		),
 ),
+```
 
 Command has alot of settings, so you can get info about it at source code. But by default, it must works fine with default CDbAuthManager.
 
