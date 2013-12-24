@@ -1,7 +1,7 @@
 yii-rbac-migrate
 ================
 
-Helper command to ease track of RBAC migration. This works only for AuthManager that uses database - CDbAuthManager or any other. Of course it depends on your way of changing RBAC roles - manually or via GUI. So in case of using GUI (like we are doing it), this helper will be very useful.
+Helper command to ease track of RBAC changes. This works only for AuthManager that uses database - CDbAuthManager or any other. Of course it depends on your way of changing RBAC roles - manually or via GUI. So in case of using GUI (like we are doing it), this helper will be very useful.
 
 Usage:
 ======
