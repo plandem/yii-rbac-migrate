@@ -39,7 +39,7 @@ $db->createCommand()->delete('<?= $entry[1]; ?>', '<?= $entry[2]; ?>', <? var_ex
 	}
 
 	public function safeDown() {
-		echo "{ClassName} does not support migration down.\\n";
+		echo "<?= $name; ?> does not support migration down.\\n";
 		return false;
 	}
 }
